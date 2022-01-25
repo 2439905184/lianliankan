@@ -1,0 +1,185 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Game.gd" type="Script" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://img/6.png" type="Texture" id=3]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="GridContainer" type="GridContainer" parent="."]
+margin_left = -1.0
+margin_right = 826.0
+margin_bottom = 560.0
+columns = 5
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureButton" type="TextureButton" parent="GridContainer"]
+margin_right = 64.0
+margin_bottom = 64.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton2" type="TextureButton" parent="GridContainer"]
+margin_left = 68.0
+margin_right = 132.0
+margin_bottom = 64.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton3" type="TextureButton" parent="GridContainer"]
+margin_left = 136.0
+margin_right = 200.0
+margin_bottom = 64.0
+texture_normal = ExtResource( 3 )
+
+[node name="TextureButton4" type="TextureButton" parent="GridContainer"]
+margin_left = 204.0
+margin_right = 268.0
+margin_bottom = 64.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton5" type="TextureButton" parent="GridContainer"]
+margin_left = 272.0
+margin_right = 336.0
+margin_bottom = 64.0
+texture_normal = ExtResource( 3 )
+
+[node name="TextureButton6" type="TextureButton" parent="GridContainer"]
+margin_top = 68.0
+margin_right = 64.0
+margin_bottom = 132.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton7" type="TextureButton" parent="GridContainer"]
+margin_left = 68.0
+margin_top = 68.0
+margin_right = 132.0
+margin_bottom = 132.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton8" type="TextureButton" parent="GridContainer"]
+margin_left = 136.0
+margin_top = 68.0
+margin_right = 200.0
+margin_bottom = 132.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton9" type="TextureButton" parent="GridContainer"]
+margin_left = 204.0
+margin_top = 68.0
+margin_right = 268.0
+margin_bottom = 132.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton10" type="TextureButton" parent="GridContainer"]
+margin_left = 272.0
+margin_top = 68.0
+margin_right = 336.0
+margin_bottom = 132.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton11" type="TextureButton" parent="GridContainer"]
+margin_top = 136.0
+margin_right = 64.0
+margin_bottom = 200.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton12" type="TextureButton" parent="GridContainer"]
+margin_left = 68.0
+margin_top = 136.0
+margin_right = 132.0
+margin_bottom = 200.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton13" type="TextureButton" parent="GridContainer"]
+margin_left = 136.0
+margin_top = 136.0
+margin_right = 200.0
+margin_bottom = 200.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton14" type="TextureButton" parent="GridContainer"]
+margin_left = 204.0
+margin_top = 136.0
+margin_right = 268.0
+margin_bottom = 200.0
+texture_normal = ExtResource( 3 )
+
+[node name="TextureButton15" type="TextureButton" parent="GridContainer"]
+margin_left = 272.0
+margin_top = 136.0
+margin_right = 336.0
+margin_bottom = 200.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton16" type="TextureButton" parent="GridContainer"]
+margin_top = 204.0
+margin_right = 64.0
+margin_bottom = 268.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton17" type="TextureButton" parent="GridContainer"]
+margin_left = 68.0
+margin_top = 204.0
+margin_right = 132.0
+margin_bottom = 268.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton18" type="TextureButton" parent="GridContainer"]
+margin_left = 136.0
+margin_top = 204.0
+margin_right = 200.0
+margin_bottom = 268.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton19" type="TextureButton" parent="GridContainer"]
+margin_left = 204.0
+margin_top = 204.0
+margin_right = 268.0
+margin_bottom = 268.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton20" type="TextureButton" parent="GridContainer"]
+margin_left = 272.0
+margin_top = 204.0
+margin_right = 336.0
+margin_bottom = 268.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton21" type="TextureButton" parent="GridContainer"]
+margin_top = 272.0
+margin_right = 64.0
+margin_bottom = 336.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton22" type="TextureButton" parent="GridContainer"]
+margin_left = 68.0
+margin_top = 272.0
+margin_right = 132.0
+margin_bottom = 336.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton23" type="TextureButton" parent="GridContainer"]
+margin_left = 136.0
+margin_top = 272.0
+margin_right = 200.0
+margin_bottom = 336.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton24" type="TextureButton" parent="GridContainer"]
+margin_left = 204.0
+margin_top = 272.0
+margin_right = 268.0
+margin_bottom = 336.0
+texture_normal = ExtResource( 2 )
+
+[node name="TextureButton25" type="TextureButton" parent="GridContainer"]
+margin_left = 272.0
+margin_top = 272.0
+margin_right = 336.0
+margin_bottom = 336.0
+texture_normal = ExtResource( 2 )
+
+[connection signal="pressed" from="GridContainer/TextureButton3" to="GridContainer" method="_on_TextureButton3_pressed" flags=6]
+[connection signal="pressed" from="GridContainer/TextureButton5" to="GridContainer" method="_on_TextureButton5_pressed" flags=6]
