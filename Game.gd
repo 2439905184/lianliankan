@@ -1,13 +1,42 @@
 extends GridContainer
 #数据栈
 var game_stack = []
+#未使用的变量
 var canvas_rid
 func _ready():
-	#canvas_rid = get_canvas_item()
+	#绘制测试 0拐直线
+	#draw_path(Vector2(0,0),Vector2(0,-40),0)
+	#绘制完成需要清栈并清屏 这里需要延迟执行 update重绘
+	#$Timer.start()
 	pass
+
+
+func _on_TextureButton2_pressed():
+	var click_info = {}
+	if $TextureButton2.texture_normal != null:
+		click_info['id'] = $TextureButton2.texture_normal.get_rid().get_id()
+		click_info['x'] = $TextureButton2.rect_position.x
+		click_info['y'] = $TextureButton2.rect_position.y
+	#click_info['pressed'] = true
+		click_info['node'] = $TextureButton2
+		#连接信号的方法
+		click_info['method'] = "_on_TextureButton2_pressed"
+	print_debug(click_info.size())
+	#判断信号是否存在
+	if game_stack.size() < 2 and click_info.size()!=0:
+		game_stack.append(click_info)
+		print("当前数据栈")
+		print(game_stack)
+		calc()
+	else:
+		printerr("超出数据栈大小，不可以入栈！")
+		print("当前数据栈")
+		print(game_stack)
+	pass # Replace with function body.
 #数据模型
-var click_info_model = {'id':0,'x':0,'y':0,'pressed':false,'node':Node2D}
+#var click_info_model = {'id':0,'x':0,'y':0,'pressed':false,'node':Node2D}
 #先判断先后点击的两个按钮的id是否一致
+#下面的方法待重构
 func _on_TextureButton3_pressed():
 	var click_info = {}
 	if $TextureButton3.texture_normal != null:
@@ -83,12 +112,15 @@ func calc():
 				game_stack.clear()
 				print(game_stack)
 			#判断是否在同一横列 且假设中间没有阻挡物
+			#此处代码需要继续升级 检测中间是否存在障碍物
 			elif game_stack[0]['y'] == game_stack[1]['y']:
 				print("直接删除这两个对象！")
 				game_stack[0]['node'].texture_normal = null
 				game_stack[1]['node'].texture_normal = null
 				print("绘制连接线!")
-				draw_path(game_stack[0]['node'].rect_position,game_stack[1]['node'].rect_position,0)
+				var p1 = game_stack[0]['node'].rect_position + Vector2(32,32)
+				var p2 = game_stack[1]['node'].rect_position + Vector2(32,32)
+				draw_path(p1,p2,0)
 				print("清除已连接的信号！")
 				#先判断是否存在信号
 				var is_c = game_stack[0]['node'].is_connected("pressed",self,game_stack[0]['method'])
@@ -113,10 +145,12 @@ var line_width = 100
 #线宽
 var line_storke = 5.0
 #绘制A到B的路径 计算路径 拐角个数
+#接线栈
+var draw_stack = []
 func draw_path(posA:Vector2,posB:Vector2,corner:int):
-	#绘制栈
-	var draw_stack = []
 	var each_data ={}
+	#接线栈数据模型
+	var each_data_model = {'from':Vector2(),'to':Vector2()}
 	if corner == 0:
 		each_data['from'] = posA
 		each_data['to'] = posB
@@ -126,11 +160,12 @@ func draw_path(posA:Vector2,posB:Vector2,corner:int):
 		pass
 	if corner == 2:
 		pass
-	for i in 3:
-		each_data['from'] = 1
-		each_data['to'] =  1
-		draw_stack.append(each_data)
+	print("接线栈数据")
+	print(draw_stack)
+	update()
+	$clear_timer.start()
 	pass
+#未使用变量 需要清理
 var to = Vector2(0,-40)
 var to_x = 0
 var to_y = 0
@@ -141,12 +176,24 @@ func _process(delta):
 enum draw_action{up,down,left,right}
 var action 
 func _draw():
-	#假设转折为2 则需要画3段直线 
-	to_y = -line_height
-	draw_line(Vector2(0,0),Vector2(0,to_y),Color.red,5.0)
-	to_x = line_width 
-	draw_line(Vector2(0,to_y),Vector2(to_x,to_y),Color.red,5.0)
-	to_y = 0
-	draw_line(Vector2(to_x,-line_height),Vector2(100,0),Color.red,5.0)
+	if draw_stack.size() == 1:
+		draw_line(draw_stack[0]['from'],draw_stack[0]['to'],Color.red,line_storke)
+#	#假设转折为2 则需要画3段直线 
+#	to_y = -line_height
+#	draw_line(Vector2(0,0),Vector2(0,to_y),Color.red,5.0)
+#	to_x = line_width 
+#	draw_line(Vector2(0,to_y),Vector2(to_x,to_y),Color.red,5.0)
+#	to_y = 0
+#	draw_line(Vector2(to_x,-line_height),Vector2(100,0),Color.red,5.0)
 	#print(to_x,to_y)
 	pass
+#清栈计时器
+func _on_Timer_timeout():
+	print("清空接线栈！")
+	draw_stack.clear()
+	print(draw_stack)
+	update()
+	#再次绘制行为 #不能这样写，会永久循环
+#	draw_path(Vector2(0,0),Vector2(100,-40),0)
+#	$Timer.start()
+	pass 

@@ -1,10 +1,14 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://icon.png" type="Texture" id=2]
 [ext_resource path="res://img/6.png" type="Texture" id=3]
+[ext_resource path="res://img/make_girls5.png" type="Texture" id=4]
+[ext_resource path="res://img/make_girls8.png" type="Texture" id=5]
+[ext_resource path="res://Game1.gd" type="Script" id=6]
 
 [node name="Node2D" type="Node2D"]
+script = ExtResource( 6 )
 __meta__ = {
 "_editor_description_": "注：此项目基于Godot3.4.2"
 }
@@ -29,7 +33,7 @@ texture_normal = ExtResource( 2 )
 margin_left = 68.0
 margin_right = 132.0
 margin_bottom = 64.0
-texture_normal = ExtResource( 2 )
+texture_normal = ExtResource( 3 )
 
 [node name="TextureButton3" type="TextureButton" parent="GridContainer"]
 margin_left = 136.0
@@ -74,7 +78,7 @@ margin_left = 204.0
 margin_top = 68.0
 margin_right = 268.0
 margin_bottom = 132.0
-texture_normal = ExtResource( 2 )
+texture_normal = ExtResource( 4 )
 
 [node name="TextureButton10" type="TextureButton" parent="GridContainer"]
 margin_left = 272.0
@@ -94,7 +98,7 @@ margin_left = 68.0
 margin_top = 136.0
 margin_right = 132.0
 margin_bottom = 200.0
-texture_normal = ExtResource( 2 )
+texture_normal = ExtResource( 5 )
 
 [node name="TextureButton13" type="TextureButton" parent="GridContainer"]
 margin_left = 136.0
@@ -185,6 +189,25 @@ margin_right = 336.0
 margin_bottom = 336.0
 texture_normal = ExtResource( 2 )
 
+[node name="clear_timer" type="Timer" parent="GridContainer"]
+one_shot = true
+__meta__ = {
+"_editor_description_": "延迟清栈，清屏计时器,此计时器完成一次清栈操作后应当停止运行，等待下一次清栈行为"
+}
+
+[node name="reset" type="Button" parent="."]
+margin_left = 650.0
+margin_top = 41.0
+margin_right = 746.0
+margin_bottom = 142.0
+text = "reset!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="GridContainer/TextureButton2" to="GridContainer" method="_on_TextureButton2_pressed"]
 [connection signal="pressed" from="GridContainer/TextureButton3" to="GridContainer" method="_on_TextureButton3_pressed"]
 [connection signal="pressed" from="GridContainer/TextureButton4" to="GridContainer" method="_on_TextureButton4_pressed"]
 [connection signal="pressed" from="GridContainer/TextureButton5" to="GridContainer" method="_on_TextureButton5_pressed"]
+[connection signal="timeout" from="GridContainer/clear_timer" to="GridContainer" method="_on_Timer_timeout"]
+[connection signal="pressed" from="reset" to="." method="_on_reset_pressed"]
