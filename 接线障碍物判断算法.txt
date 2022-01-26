@@ -1,0 +1,106 @@
+算法参考地址：https://blog.csdn.net/artzok/article/details/51622782
+
+1）0折连接
+
+0折连接表示A与B的X坐标或Y坐标相等，可以直线连接，不需要任何拐点，且连通的路径上没有任何阻碍，具体可以分为下面两种情况。
+
+2）1折连接
+
+1折连接与0折连接恰好相反，要求A单元格与B单元格的X轴坐标与Y轴坐标都不能相等。此时通过A与B可以画出一个矩形，而A与B位于矩形的对
+
+3）2折连接
+
+根据递归的思想，判断A单元格与B单元格能否经过两个拐点连接，
+可以转化为判断能否找到一个C单元格，该C单元格可以与A单元格0折连接，
+且C与B可以1折连接。若能找到这样一个C单元格，那么A与B就可以2折连接，下面截图解释了2折连接的情况：
+
+二折连接就是要先尝试找到一个能和A点成0折连接的点，再继续扫描
+
+3 如何实现通用的分类搜索算法
+
+
+前面多次强调，我们需要实现一个通用的分类搜索算法。通用意味着算法与具体的实现分离。
+上面介绍的分类搜索算法建立在一个二维数组的前提下，但是我们应该使用何种类型的二维数组呢？
+为了满足上述要求，我们应该定义一个所有希望使用该算法的应用都应该实现的一个接口，然后在算法中使用该接口类型的二维数组。
+
+那么该接口应该包含些什么方法呢？根据上面对算法的分析，分类搜索算法唯一需要判断的就是每个单元格的连通性，
+即单元格是否已经填充。理解了这些内容，下面我们创建该接口。
+
+1）0折连通算法
+
+接下来我们来实现0折连通的算法。首先我们需要声明一个类，这里我们将该类声明为LinkSerach。下面我们需要思考0折连通需要些什么参数，以及返回值应该是什么？首先，我们必须传递一个实现了LinkInterface接口的类的数组对象。其次我们还必须传递A和B的位置坐标。搜索算法的一个重要功能就是返回搜索的路径。对于0折连接，即使搜索到可用路径，我们也不用返回任何路径，因为整个连通路径就是A和B点的连线。但是我们必须返回一个可以表明搜索是否成功的boolean类型值。
+接下来创建该方法：
+public class LinkSearch {
+    private static boolean MatchBolck(LinkInterface[][] datas, 
+            final Point srcPt, final Point destPt) {
+        
+        // 如果不属于0折连接则返回false
+        if(srcPt.x != destPt.x && srcPt.y != destPt.y)
+            return false;
+        
+        int min, max;
+        
+        // 如果两点的x坐标相等，则在水平方向上扫描
+        if(srcPt.x == destPt.x) {
+            min = srcPt.y < destPt.y ? srcPt.y : destPt.y;
+            max = srcPt.y > destPt.y ? srcPt.y : destPt.y;
+            for(min++; min < max; min++) {
+                if(!datas[srcPt.x][min].isEmpty()) 
+                    return false;
+            }
+        } 
+        // 如果两点的y坐标相等，则在竖直方向上扫描
+        else {
+            min = srcPt.x < destPt.x ? srcPt.x : destPt.x;
+            max = srcPt.x > destPt.x ? srcPt.x : destPt.x;
+            for(min++; min < max; min++) {
+                if(!datas[min][srcPt.y].isEmpty()) 
+                    return false;
+            }
+        }
+        return true;
+  }
+}
+2）1折连接
+
+1折连接算法与0折连接算法输入参数相同，但是1折连接算法应该返回搜索路径。那么应该如何处理呢？
+由于1折连接算法最多只有1个拐点，而整个路径就是两个搜索单元格的位置加上该拐点的位置，
+需要搜索的单元格位置用户已经知道，因此我们只需要返回拐点的位置即可，当没有搜索到连接路径时可以返回null值，
+下面是1折连接的搜索算法：
+ private static Point MatchBolckOne(LinkInterface[][] datas, 
+            final Point srcPt, final Point destPt) {
+		// 如果不属于1折连接则返回null
+        if(srcPt.x == destPt.x || srcPt.y == destPt.y)
+            return null;
+        
+        // 测试对角点1
+        Point pt = new Point(srcPt.x,destPt.y);
+        
+        if(datas[pt.x][pt.y].isEmpty()) {
+           boolean stMatch = MatchBolck(datas, srcPt, pt);
+           boolean tdMatch = stMatch ? 
+                 MatchBolck(datas, pt, destPt) : stMatch;
+            if (stMatch && tdMatch) {
+                return pt;
+            }
+        }
+        
+        // 测试对角点2
+        pt = new Point(destPt.x, srcPt.y);
+        
+        if(datas[pt.x][pt.y].isEmpty()) { 
+            boolean stMatch = MatchBolck(datas, srcPt, pt);
+            boolean tdMatch = stMatch ? 
+                  MatchBolck(datas, pt, destPt) : stMatch;
+            if (stMatch && tdMatch) {
+                return pt;
+            }
+        }
+        return null;
+    }
+这里的0折连接算法在1折和二折的情况下都有使用。
+说明作者是把复杂问题转换为了求最多能有几个0折接线的问题，即大的折线的每一个小部分都是0折直线。
+
+3)2折连接
+
+可以发现，0折算法和1折算法都是独立，如果是1折连接的情况，我们是不能使用0折算法进行判断的，同样，属于0折的情况，我们也是不能使用1折算法进行判断的。为了建立一种通用的方法，我们必须在2折连接算法里包含上述两种算法的判断,这也是为什么我们将上述两个方法声明为private的原因，因为我们只需要为用户暴露2折算法的方法即可。还有，2折连接需要返回一个包含两个拐点的路径，此处我们使用Java基础库的LinkedList来实现，具体代码如下：
