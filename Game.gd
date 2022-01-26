@@ -1,13 +1,14 @@
 extends GridContainer
 #数据栈
 var game_stack = []
-#未使用的变量
-var canvas_rid
+var block_nodes = []
+#棋盘大小 5x5 外加外围一圈变成6x6
 func _ready():
-	#绘制测试 0拐直线
-	#draw_path(Vector2(0,0),Vector2(0,-40),0)
-	#绘制完成需要清栈并清屏 这里需要延迟执行 update重绘
-	#$Timer.start()
+	for i in get_children():
+		if i.name != "clear_timer":
+			block_nodes.append(i)
+	print("棋盘数据")
+	#print(block_nodes)
 	pass
 
 
@@ -113,14 +114,41 @@ func calc():
 				print(game_stack)
 			#判断是否在同一横列 且假设中间没有阻挡物
 			#此处代码需要继续升级 检测中间是否存在障碍物
+			#判断完同一横线时，判断起始点是否在终点左侧，如果在，则向右探测判断路径上的节点是否存在纹理不同的方块
 			elif game_stack[0]['y'] == game_stack[1]['y']:
+				#这里不会用三元运算符，老办法，笨办法，代码会很多
+				#在GridMap中，每一个节点的下一个节点一定会在那一个节点的右侧，所以根据这个节点所在数组的位置进行判断
+				if game_stack[0]['x'] < game_stack[1]['x']:
+					#找到起始点node在node数组的位置
+					var fromNode_index_at = block_nodes.find(game_stack[0]['node'])
+					print("起始点node在node数组的位置",fromNode_index_at)
+					var right_node = block_nodes[fromNode_index_at+1]
+					#顺时针测试周围节点右 下 左 上
+					if game_stack[0]['node'].texture_normal.get_rid().get_id() != right_node.texture_normal.get_rid().get_id():
+						printerr("右侧方块纹理与左侧方块纹理不同，0折假设不成立")
+						print("开始测试下方节点是否为空缺节点")
+					#根据棋盘大小5*5 所以下方节点的index应该是起始点index+5
+					var down_node = block_nodes[fromNode_index_at+5]
+					if game_stack[0]['node'].texture_normal.get_rid().get_id() != down_node.texture_normal.get_rid().get_id():
+						printerr("下方方块纹理与起始点纹理不同，在其他折线情况中，此路径不通（即此节点不是空缺节点),此次假设不成立")
+						print("开始测试左侧节点是否为空缺节点")
+					var left_node = block_nodes[fromNode_index_at-1]
+					if game_stack[0]['node'].texture_normal.get_rid().get_id() != left_node.texture_normal.get_rid().get_id():
+						printerr("左侧方块纹理与起始点纹理不同，在其他折线情况中，此路径不通（即此节点不是空缺节点),此次假设不成立")
+						print("开始测试左侧节点是否为空缺节点")
+					#此处上方节点分两种情况讨论，如果起始点是最外围节点，则不能使用节点索引判断法
+					#如果起始点是内部节点，则可以使用节点索引判断法，根据数学规律，当起始点为内部节点时，上方节点索引=起始点索引-5
+					#关于判断起始点是否为外围节点，请查阅外围节点规律判断.png
+					var up_node = ""
+					
+					pass
 				print("直接删除这两个对象！")
 				game_stack[0]['node'].texture_normal = null
 				game_stack[1]['node'].texture_normal = null
 				print("绘制连接线!")
 				var p1 = game_stack[0]['node'].rect_position + Vector2(32,32)
 				var p2 = game_stack[1]['node'].rect_position + Vector2(32,32)
-				draw_path(p1,p2,0)
+				#draw_path(p1,p2,0)
 				print("清除已连接的信号！")
 				#先判断是否存在信号
 				var is_c = game_stack[0]['node'].is_connected("pressed",self,game_stack[0]['method'])
