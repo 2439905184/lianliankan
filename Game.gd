@@ -1,11 +1,9 @@
 extends GridContainer
 #数据栈
 var game_stack = []
+var canvas_rid
 func _ready():
-	#$TextureButton.connect("pressed",self,"a")
-	pass
-func a():
-	#print("连接")
+	#canvas_rid = get_canvas_item()
 	pass
 #数据模型
 var click_info_model = {'id':0,'x':0,'y':0,'pressed':false,'node':Node2D}
@@ -89,6 +87,8 @@ func calc():
 				print("直接删除这两个对象！")
 				game_stack[0]['node'].texture_normal = null
 				game_stack[1]['node'].texture_normal = null
+				print("绘制连接线!")
+				draw_path(game_stack[0]['node'].rect_position,game_stack[1]['node'].rect_position,0)
 				print("清除已连接的信号！")
 				#先判断是否存在信号
 				var is_c = game_stack[0]['node'].is_connected("pressed",self,game_stack[0]['method'])
@@ -107,7 +107,46 @@ func calc():
 			game_stack.clear()
 			print(game_stack)
 	pass
-	
-#var is_c =game_stack[0]['node'].is_connected("pressed",self,game_stack[0]['method'])
-#		print(is_c)
+#接线，转折宽度 而不是线宽
+var line_height = 20
+var line_width = 100
+#线宽
+var line_storke = 5.0
+#绘制A到B的路径 计算路径 拐角个数
+func draw_path(posA:Vector2,posB:Vector2,corner:int):
+	#绘制栈
+	var draw_stack = []
+	var each_data ={}
+	if corner == 0:
+		each_data['from'] = posA
+		each_data['to'] = posB
+		draw_stack.append(each_data)
+		pass
+	if corner == 1:
+		pass
+	if corner == 2:
+		pass
+	for i in 3:
+		each_data['from'] = 1
+		each_data['to'] =  1
+		draw_stack.append(each_data)
+	pass
+var to = Vector2(0,-40)
+var to_x = 0
+var to_y = 0
 
+func _process(delta):
+	#update()
+	pass
+enum draw_action{up,down,left,right}
+var action 
+func _draw():
+	#假设转折为2 则需要画3段直线 
+	to_y = -line_height
+	draw_line(Vector2(0,0),Vector2(0,to_y),Color.red,5.0)
+	to_x = line_width 
+	draw_line(Vector2(0,to_y),Vector2(to_x,to_y),Color.red,5.0)
+	to_y = 0
+	draw_line(Vector2(to_x,-line_height),Vector2(100,0),Color.red,5.0)
+	#print(to_x,to_y)
+	pass

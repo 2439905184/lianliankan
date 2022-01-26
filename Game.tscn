@@ -5,11 +5,15 @@
 [ext_resource path="res://img/6.png" type="Texture" id=3]
 
 [node name="Node2D" type="Node2D"]
+__meta__ = {
+"_editor_description_": "注：此项目基于Godot3.4.2"
+}
 
 [node name="GridContainer" type="GridContainer" parent="."]
-margin_left = -1.0
-margin_right = 826.0
-margin_bottom = 560.0
+margin_left = 99.0
+margin_top = 64.0
+margin_right = 588.0
+margin_bottom = 496.0
 columns = 5
 script = ExtResource( 1 )
 __meta__ = {
